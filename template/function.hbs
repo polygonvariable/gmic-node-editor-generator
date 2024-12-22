@@ -10,10 +10,10 @@ class GMIC_{{cid}}_{{id}}(GMICBaseNode):
     {{#each property}}
     {{@key}}: {{this.type}}(
         name="{{this.name}}",
-        default={{#if (or (eq this.type "StringProperty") (eq this.type "EnumProperty"))}}"{{this.default}}"{{else}}{{this.default}}{{/if}},{{#if (eq this.type "FloatProperty")}}
-        {{#if this.min}}min={{this.min}}, {{/if}}{{/if}}{{#if (eq this.type "FloatProperty")}}
+        default={{#if (or (eq this.type "StringProperty") (eq this.type "EnumProperty"))}}"{{this.default}}"{{else}}{{this.default}}{{/if}},{{#if (or (eq this.type "IntProperty") (eq this.type "FloatProperty"))}}
+        {{#if this.min}}min={{this.min}}, {{/if}}{{/if}}{{#if (or (eq this.type "IntProperty") (eq this.type "FloatProperty"))}}
         {{#if this.max}}max={{this.max}}, {{/if}}{{/if}}{{#if (eq this.type "EnumProperty")}}
-        items=create_enum({{#if (and (has this.items "(")(has this.items ")"))}}{{this.items}}{{else}}[{{#each this.items}}"{{this}}"{{#unless @last}}, {{/unless}}{{/each}}]{{/if}}){{/if}}
+        items=create_enum([{{#each this.items}}"{{this}}"{{#unless @last}}, {{/unless}}{{/each}}]),{{/if}}
     ) # type: ignore
     {{/each}}
 

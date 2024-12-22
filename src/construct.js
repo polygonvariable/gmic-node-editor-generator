@@ -57,7 +57,7 @@ function createNode(filters, commands) {
             continue;
         }
 
-        let nodeId = `GMIC_${data.name.replace(/\W/g, "").toLowerCase()}`;
+        let nodeId = `${data.name.replace(/\W/g, "").toLowerCase()}`;
         let author;
 
         let property = {};
@@ -67,7 +67,10 @@ function createNode(filters, commands) {
 
             let parameterId;
             if(parameter.name) {
-                parameterId = `var${parameter.name.replace(/\W/g, "").toLowerCase()}`;
+                parameterId = `var_${parameter.name.replace(/\W/g, "").toLowerCase()}`;
+                if(parameterId.includes("preview")) {
+                    continue;
+                }
             }
 
             if(parameter.type === "float") {
@@ -136,7 +139,7 @@ function createNode(filters, commands) {
             property: property,
             command: {
                 reference: command,
-                final: `${command} ${commandCode}`
+                final: `${command} ${commandCode.slice(0, commandCode.length - 1)}`
             },
         }
     }
@@ -145,7 +148,7 @@ function createNode(filters, commands) {
 
 }
 
-async function createTransformer(version, id, commands) {
+async function constructB3DFilter(version, id, commands) {
     try {
 
         const filters = await readFilter(version);
@@ -164,4 +167,6 @@ async function createTransformer(version, id, commands) {
     }
 }
 
-createTransformer("343", "fartistic" , [ "samj_Filtres_Sur_Tuiles" ]);
+// constructB3DFilter("343", "fartistic" , [ "fx_boost_chroma" ]);
+
+export default constructB3DFilter;

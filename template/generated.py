@@ -3,5 +3,4 @@ from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringPropert
 from ..base.node import GMICBaseNode, create_enum
 
 # @Code
-
 # @ClassList
