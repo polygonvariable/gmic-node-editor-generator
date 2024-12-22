@@ -1,0 +1,21 @@
+class GMIC_{{cid}}_{{id}}(GMICBaseNode):
+    """{{name}} by {{author}}"""
+    # {{command.reference}}
+
+    bl_idname = "{{cid}}_{{id}}"
+    bl_label = "{{name}}"
+
+    node_props = [{{#each property}}"{{@key}}"{{#unless @last}}, {{/unless}}{{/each}}]
+
+    {{#each property}}
+    {{@key}}: {{this.type}}(
+        name="{{this.name}}",
+        default={{#if (or (eq this.type "StringProperty") (eq this.type "EnumProperty"))}}"{{this.default}}"{{else}}{{this.default}}{{/if}},{{#if (eq this.type "FloatProperty")}}
+        {{#if this.min}}min={{this.min}}, {{/if}}{{/if}}{{#if (eq this.type "FloatProperty")}}
+        {{#if this.max}}max={{this.max}}, {{/if}}{{/if}}{{#if (eq this.type "EnumProperty")}}
+        items=create_enum({{#if (and (has this.items "(")(has this.items ")"))}}{{this.items}}{{else}}[{{#each this.items}}"{{this}}"{{#unless @last}}, {{/unless}}{{/each}}]{{/if}}){{/if}}
+    ) # type: ignore
+    {{/each}}
+
+    def create_command(self):
+        return "{{command.final}}"

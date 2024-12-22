@@ -1,0 +1,16 @@
+{
+  "name": "gmic-node-editor-generator",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/app.js"
+  },
+  "author": "polygonvariable",
+  "license": "ISC",
+  "dependencies": {
+    "handlebars": "^4.7.8"
+  }
+}
