@@ -51,6 +51,13 @@
                     "name": "Channel",
                     "default": "0",
                     "items": ["name", "hello"]
+                },
+                "color": {
+                    "type": "FloatVectorProperty",
+                    "name": "Color",
+                    "default": "(1.0, 1.0, 1.0)",
+                    "min": "0.0",
+                    "max": "1.0"
                 }
             },
             "command": {

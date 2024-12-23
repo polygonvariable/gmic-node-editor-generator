@@ -62,16 +62,18 @@ function createNode(filters, commands) {
 
         let property = {};
         let commandCode = "";
+        let index = 0;
         
         for(const parameter of data.parameters) {
 
-            let parameterId;
-            if(parameter.name) {
-                parameterId = `var_${parameter.name.replace(/\W/g, "").toLowerCase()}`;
-                if(parameterId.includes("preview")) {
-                    continue;
-                }
-            }
+            // let parameterId;
+            // if(parameter.name) {
+            //     parameterId = `var_${parameter.name.replace(/\W/g, "").toLowerCase()}`;
+            //     if(parameterId.includes("preview")) {
+            //         continue;
+            //     }
+            // }
+            let parameterId = `var_prop${index}`;
 
             if(parameter.type === "float") {
                 property[parameterId] = {
@@ -99,7 +101,7 @@ function createNode(filters, commands) {
                     name: parameter.name,
                     default: parameter.default,
                 }
-                commandCode += `{self.${parameterId}},`;
+                commandCode += `{int(self.${parameterId})},`;
             }
             else if(parameter.type === "choice") {
                 property[parameterId] = {
@@ -110,7 +112,7 @@ function createNode(filters, commands) {
                 }
                 commandCode += `{self.${parameterId}},`;
             }
-            else if(parameter.type === "text") {
+            else if(parameter.type === "text" || parameter.type === "file") {
                 property[parameterId] = {
                     type: "StringProperty",
                     name: parameter.name,
@@ -119,6 +121,33 @@ function createNode(filters, commands) {
                 commandCode += `{self.${parameterId}},`;
             }
             else if(parameter.type === "color") {
+
+                let pColor = parameter.default.split(",");
+                if(pColor.length > 3) {
+                    pColor = pColor.slice(0, 3);
+                }
+
+                for(let i = 0, len = pColor.length; i < len; i++) {
+                    pColor[i] = addZero(pColor[i]);
+                }
+
+                property[parameterId] = {
+                    type: "FloatVectorProperty",
+                    name: parameter.name,
+                    default: `(${pColor.join(",")})`,
+                    min: "0.0",
+                    max: "1.0"
+                }
+                commandCode += `{self.${parameterId}[0]},{self.${parameterId}[1]},{self.${parameterId}[2]},255,`;
+                //scrap = true;
+            }
+            else if(parameter.type === "value") {
+                commandCode += `${Math.abs(parameter.value)},`;
+            }
+            else if(parameter.type === "point") {
+                commandCode += `${parameter.position},`;
+            }
+            else if(parameter.type === "button") {
                 scrap = true;
             }
             else if(parameter.type === "note") {
@@ -126,10 +155,13 @@ function createNode(filters, commands) {
                     author = parameter.text.replace(/\s+/g, " ");
                 }
             }
+
+            index++;
+
         }
 
         if(scrap) {
-            console.log("Node not added as some property is not supported (color)");
+            console.log("Node not added as some property is not supported");
             continue;
         }
 
@@ -167,6 +199,6 @@ async function constructB3DFilter(version, id, commands) {
     }
 }
 
-// constructB3DFilter("343", "fartistic" , [ "fx_boost_chroma" ]);
+//constructB3DFilter("343", "fartistic" , [ "samj_Ellipses_Colorees" ]);
 
 export default constructB3DFilter;

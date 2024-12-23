@@ -5,6 +5,7 @@ import { argv, argv0 } from "process";
 
 Handlebars.registerHelper("eq", (arg1, arg2) => arg1 === arg2);
 Handlebars.registerHelper("or", (arg1, arg2) => arg1 || arg2);
+Handlebars.registerHelper("or3", (arg1, arg2, arg3) => arg1 || arg2 || arg3);
 Handlebars.registerHelper("and", (arg1, arg2) => arg1 && arg2);
 Handlebars.registerHelper("has", (arg1, arg2) => () => arg1.toString().indexOf(arg2) >= 0);
 
@@ -47,7 +48,7 @@ async function generateCode(cid, inPath, outPath) {
 
         let funcCode = "";
         for(const [id, node] of Object.entries(data)) {
-            funcCode += "#".repeat(80) + "\n\n";
+            funcCode += "\n" + "#".repeat(80) + "\n\n";
             funcCode += funcTemplate({ cid, id, ...node });
             funcCode += "\n\n" + "#".repeat(80);
         }
@@ -56,9 +57,9 @@ async function generateCode(cid, inPath, outPath) {
         const nodes = Object.keys(data);
 
         let classCode = "";
-        classCode += "\n" + "#".repeat(80) + "\n\n";
+        classCode += "#".repeat(80) + "\n\n";
         classCode += classTemplate({ cid, nodes });
-        classCode += "\n\n" + "#".repeat(80) + "\n";
+        classCode += "\n\n" + "#".repeat(80);
 
         code = code.replace("# @Code", funcCode);
         code = code.replace("# @ClassList", classCode);
