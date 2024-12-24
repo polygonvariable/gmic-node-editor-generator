@@ -118,7 +118,7 @@ function createNode(filters, commands) {
                     name: parameter.name,
                     default: parameter.default
                 }
-                commandCode += `{self.${parameterId}},`;
+                commandCode += `@@{self.${parameterId}}@@,`;
             }
             else if(parameter.type === "color") {
 
@@ -126,9 +126,8 @@ function createNode(filters, commands) {
                 if(pColor.length > 3) {
                     pColor = pColor.slice(0, 3);
                 }
-
                 for(let i = 0, len = pColor.length; i < len; i++) {
-                    pColor[i] = addZero(pColor[i]);
+                    pColor[i] = addZero(((pColor[i] * 1) / 255).toString());
                 }
 
                 property[parameterId] = {
@@ -138,14 +137,39 @@ function createNode(filters, commands) {
                     min: "0.0",
                     max: "1.0"
                 }
-                commandCode += `{self.${parameterId}[0]},{self.${parameterId}[1]},{self.${parameterId}[2]},255,`;
+                commandCode += `{self.${parameterId}[0]*255},{self.${parameterId}[1]*255},{self.${parameterId}[2]*255},255,`;
                 //scrap = true;
             }
             else if(parameter.type === "value") {
                 commandCode += `${Math.abs(parameter.value)},`;
             }
             else if(parameter.type === "point") {
-                commandCode += `${parameter.position},`;
+                if(parameter.visibility && parameter.visibility === "0") {
+
+                    commandCode += `${parameter.position},`;
+
+                }
+                else {
+                    
+                    let point = parameter.position.split(",");
+                    
+                    property[`${parameterId}_x`] = {
+                        type: "FloatProperty",
+                        name: `${parameter.name} X`,
+                        default: addZero(point[0]),
+                        min: "0.0",
+                        max: "10000.0"
+                    }
+                    property[`${parameterId}_y`] = {
+                        type: "FloatProperty",
+                        name: `${parameter.name} Y`,
+                        default: addZero(point[1]),
+                        min: "0.0",
+                        max: "10000.0"
+                    }
+                    commandCode += `{self.${parameterId}_x},{self.${parameterId}_y},`;
+
+                }
             }
             else if(parameter.type === "button") {
                 scrap = true;

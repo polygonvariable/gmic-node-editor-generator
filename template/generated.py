@@ -1,6 +1,7 @@
-from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty )
+from bpy.props import ( IntProperty, FloatProperty, EnumProperty, BoolProperty, FloatVectorProperty, StringProperty )
 
-from ..base.node import GMICBaseNode, create_enum
+from ...base.node import GMICBaseNode
+from ...base.library import create_enum
 
 # @Code
 # @ClassList

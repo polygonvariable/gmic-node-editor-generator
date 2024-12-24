@@ -64,7 +64,7 @@ async function generateCode(cid, inPath, outPath) {
         code = code.replace("# @Code", funcCode);
         code = code.replace("# @ClassList", classCode);
 
-        await fsp.writeFile(path.join("generated/", outPath), code);
+        await fsp.writeFile(path.join("generated/", outPath), code.replace(/@@/g, `\\\\\\"`));
 
         console.log("Code generated successfully");
 
