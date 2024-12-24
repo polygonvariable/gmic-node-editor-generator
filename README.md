@@ -1,5 +1,5 @@
 # G'MIC Node Editor Generator 🌅
-A Python node code generator for the G'MIC Node Editor Blender addon.
+A Python node code generator for the [G'MIC Node Editor](https://github.com/polygonvariable/gmic-node-editor) Blender addon.
 
 # Why Use the Generator?
 Writing code for nodes can be a repetitive and time-consuming task. To simplify the development process, this code generator automates the creation of node code, significantly reducing development time.
