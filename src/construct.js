@@ -27,7 +27,7 @@ function findFilterData(filters, commad) {
         }
 
         if(!data) {
-            throw new Error("No filter found");
+            throw new Error(`No filter found: ${commad}`);
         }
 
         return data;
@@ -122,26 +122,49 @@ function createNode(filters, commands) {
             }
             else if(parameter.type === "color") {
 
-                let pColor = parameter.default.split(",");
-                if(pColor.length > 3) {
-                    pColor = pColor.slice(0, 3);
+                const v4Color = parameter.default.split(",");
+
+                let v3Color;
+                if(v4Color.length > 3) {
+                    v3Color = v4Color.slice(0, 3);
                 }
-                for(let i = 0, len = pColor.length; i < len; i++) {
-                    pColor[i] = addZero(((pColor[i] * 1) / 255).toString());
+                else {
+                    v3Color = v4Color;
                 }
 
+                for(let i = 0, len = v3Color.length; i < len; i++) {
+                    v3Color[i] = addZero(((v3Color[i] * 1) / 255).toString());
+                }
                 property[parameterId] = {
                     type: "FloatVectorProperty",
                     name: parameter.name,
-                    default: `(${pColor.join(",")})`,
+                    default: `(${v3Color.join(",")})`,
                     min: "0.0",
                     max: "1.0"
                 }
-                commandCode += `{self.${parameterId}[0]*255},{self.${parameterId}[1]*255},{self.${parameterId}[2]*255},255,`;
+
+                let v4Param = "";
+                if(v4Color[3]) {
+                    property[`${parameterId}_alpha`] = {
+                        type: "FloatProperty",
+                        name: parameter.name,
+                        default: addZero(((v4Color[3] * 1) / 255).toString()),
+                        min: 0.0,
+                        max: 1.0
+                    }
+                    v4Param = `{self.${parameterId}_alpha*255},`;
+                }
+
+                commandCode += `{self.${parameterId}[0]*255},{self.${parameterId}[1]*255},{self.${parameterId}[2]*255},${v4Param}`;
                 //scrap = true;
             }
             else if(parameter.type === "value") {
-                commandCode += `${Math.abs(parameter.value)},`;
+                if(parameter.value.indexOf(",") == -1) {
+                    commandCode += `${parameter.value},`;
+                }
+                else {
+                    commandCode += `@@${parameter.value}@@,`;
+                }
             }
             else if(parameter.type === "point") {
                 if(parameter.visibility && parameter.visibility === "0") {
