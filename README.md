@@ -1,4 +1,4 @@
-# G'MIC Node Editor Generator 🌅
+# G'MIC Node Editor Generator 🔆
 A Python node code generator for the [G'MIC Node Editor](https://github.com/polygonvariable/gmic-node-editor) Blender addon.
 
 # Why Use the Generator?
@@ -22,3 +22,7 @@ The simplified JSON file is processed to generate the final node code, ready to 
 2. `construct.js`: Searches the G'MIC filter library JSON file to create a simplified JSON file for a given set of commands.
 3. `generate.js`: Uses the simplified JSON file to generate the final node code.
 4. `download.js`: Handles downloading the G'MIC filter library JSON file.
+
+---
+
+## ☄️
